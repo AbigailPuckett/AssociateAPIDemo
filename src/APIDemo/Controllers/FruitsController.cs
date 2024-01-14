@@ -59,5 +59,36 @@ namespace APIDemo.Controllers
             return NotFound();
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Fruit newFruit)
+        {
+            //mock adding new fruit to the array
+            Fruit[] fruitDataSet = new Fruit[] { };
+
+            var updateFruitDataSet = fruits.Concat(fruitDataSet).ToList();
+
+            return Created($"{newFruit.Id}",newFruit);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] Fruit fruit)
+        {
+            var updateTarget = fruits.FirstOrDefault(f => f.Id == fruit.Id);
+
+            if (updateTarget != null)
+            {
+                return NoContent();
+            }
+
+            // Simulate a record update in a datastore
+            updateTarget.Freshness = fruit.Freshness;
+            updateTarget.Name = fruit.Name;
+            updateTarget.Price = fruit.Price;
+            updateTarget.Description = fruit.Description;
+            updateTarget.Weight = fruit.Weight;
+
+            return Ok(fruits);
+        }
     }
 }
